@@ -144,7 +144,13 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Remove bundled binaries
-        run: find bin/ -name "kirha-mcp-gateway-*" -not -name "*.js" -delete || true
+        run: rm -rf bin/* || true
+
+      - name: Copy JavaScript wrapper
+        run: |
+          mkdir -p bin
+          cp scripts/kirha-mcp-gateway.js bin/kirha-mcp-gateway.js
+          chmod +x bin/kirha-mcp-gateway.js
 
       - name: Publish to NPM
         run: npm publish --access public

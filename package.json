@@ -1,7 +1,7 @@
 {
   "name": "@kirha/mcp-gateway",
-  "version": "0.0.1",
-  "description": "A high-performance Model Context Protocol server for Kirha AI",
+  "version": "0.0.2",
+  "description": "The MCP Gateway is the entrypoint to all data providers featured with Kirha, providing a one-to-all solution for accessing multiple private data sources",
   "main": "bin/kirha-mcp-gateway.js",
   "bin": {
     "kirha-mcp-gateway": "./bin/kirha-mcp-gateway.js"
