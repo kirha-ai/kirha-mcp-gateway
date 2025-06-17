@@ -1,0 +1,42 @@
+name: Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Install Wire
+        run: go install github.com/google/wire/cmd/wire@latest
+
+      - name: Generate Wire code
+        run: cd di && wire
+
+      - name: Run tests
+        run: go test -v ./...
+
+      - name: Run tests with race detection
+        run: go test -race -v ./...
+
+      - name: Build binary
+        run: go build -o bin/kirha-mcp-gateway ./cmd
+
+      - name: Test binary execution
+        run: |
+          ./bin/kirha-mcp-gateway --help
+          ./bin/kirha-mcp-gateway stdio --help
+          ./bin/kirha-mcp-gateway http --help

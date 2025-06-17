@@ -1,0 +1,95 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: [amd64, arm64]
+        exclude:
+          - goos: windows
+            goarch: arm64
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.24.x'
+    
+    - name: Cache Go modules
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+    
+    - name: Download dependencies
+      run: go mod download
+    
+    - name: Install Wire
+      run: go install github.com/google/wire/cmd/wire@latest
+    
+    - name: Generate Wire code
+      run: cd di && wire
+    
+    - name: Get build info
+      id: build_info
+      run: |
+        echo "version=$(git describe --tags --always --dirty)" >> $GITHUB_OUTPUT
+        echo "commit=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        echo "date=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
+        echo "go_version=$(go version | awk '{print $3}')" >> $GITHUB_OUTPUT
+    
+    - name: Set binary name
+      id: binary
+      run: |
+        if [ "${{ matrix.goos }}" = "windows" ]; then
+          echo "name=kirha-mcp-gateway.exe" >> $GITHUB_OUTPUT
+        else
+          echo "name=kirha-mcp-gateway" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Build binary
+      run: |
+        CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build \
+          -ldflags "-s -w \
+            -X 'go.kirha.ai/kirha-mcp-gateway/cmd/cli.version=${{ steps.build_info.outputs.version }}' \
+            -X 'go.kirha.ai/kirha-mcp-gateway/cmd/cli.commit=${{ steps.build_info.outputs.commit }}' \
+            -X 'go.kirha.ai/kirha-mcp-gateway/cmd/cli.date=${{ steps.build_info.outputs.date }}' \
+            -X 'go.kirha.ai/kirha-mcp-gateway/cmd/cli.goVersion=${{ steps.build_info.outputs.go_version }}'" \
+          -o dist/${{ steps.binary.outputs.name }} \
+          ./cmd
+    
+    - name: Create archive
+      run: |
+        cd dist
+        if [ "${{ matrix.goos }}" = "windows" ]; then
+          zip -r ../kirha-mcp-gateway-${{ matrix.goos }}-${{ matrix.goarch }}.zip .
+        else
+          tar -czf ../kirha-mcp-gateway-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz .
+        fi
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: kirha-mcp-gateway-${{ matrix.goos }}-${{ matrix.goarch }}
+        path: |
+          kirha-mcp-gateway-${{ matrix.goos }}-${{ matrix.goarch }}.*
+        retention-days: 30

@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  kirha-mcp-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VERSION: "dev"
+        COMMIT: "local"
+        DATE: "2024-01-01T00:00:00Z"
+        GO_VERSION: "go1.24"
+    environment:
+      - KIRHA_API_KEY=${KIRHA_API_KEY}
+      - KIRHA_VERTICAL=${KIRHA_VERTICAL}
+      - KIRHA_BASE_URL=${KIRHA_BASE_URL:-https://api.kirha.ai}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    healthcheck:
+      test: ["/usr/local/bin/kirha-mcp-gateway", "health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add a reverse proxy for production deployments
+  # nginx:
+  #   image: nginx:alpine
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./ssl:/etc/nginx/ssl:ro
+  #   depends_on:
+  #     - kirha-mcp-gateway
+  #   restart: unless-stopped

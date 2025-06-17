@@ -1,0 +1,162 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Binaries
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          # Linux
+          - goos: linux
+            goarch: amd64
+            name: linux-amd64
+          - goos: linux
+            goarch: arm64
+            name: linux-arm64
+          # macOS
+          - goos: darwin
+            goarch: amd64
+            name: darwin-amd64
+          - goos: darwin
+            goarch: arm64
+            name: darwin-arm64
+          # Windows
+          - goos: windows
+            goarch: amd64
+            name: windows-amd64
+            ext: .exe
+          - goos: windows
+            goarch: arm64
+            name: windows-arm64
+            ext: .exe
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Install Wire
+        run: go install github.com/google/wire/cmd/wire@latest
+
+      - name: Generate Wire code
+        run: cd di && wire
+
+      - name: Get version
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Build binary
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 0
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          COMMIT="${{ github.sha }}"
+          DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          GO_VERSION="$(go version | awk '{print $3}')"
+          
+          go build \
+            -ldflags "-s -w \
+              -X 'go.kirha.ai/kirha-mcp-gateway/cmd/cli.version=${VERSION}' \
+              -X 'go.kirha.ai/kirha-mcp-gateway/cmd/cli.commit=${COMMIT}' \
+              -X 'go.kirha.ai/kirha-mcp-gateway/cmd/cli.date=${DATE}' \
+              -X 'go.kirha.ai/kirha-mcp-gateway/cmd/cli.goVersion=${GO_VERSION}'" \
+            -o "kirha-mcp-gateway-${{ matrix.name }}${{ matrix.ext }}" \
+            ./cmd
+
+      - name: Create checksum
+        run: |
+          if command -v sha256sum >/dev/null 2>&1; then
+            sha256sum "kirha-mcp-gateway-${{ matrix.name }}${{ matrix.ext }}" > "kirha-mcp-gateway-${{ matrix.name }}${{ matrix.ext }}.sha256"
+          else
+            shasum -a 256 "kirha-mcp-gateway-${{ matrix.name }}${{ matrix.ext }}" > "kirha-mcp-gateway-${{ matrix.name }}${{ matrix.ext }}.sha256"
+          fi
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: kirha-mcp-gateway-${{ matrix.name }}
+          path: |
+            kirha-mcp-gateway-${{ matrix.name }}${{ matrix.ext }}
+            kirha-mcp-gateway-${{ matrix.name }}${{ matrix.ext }}.sha256
+          retention-days: 1
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Get version
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Prepare release files
+        run: |
+          mkdir -p release
+          find artifacts -name "kirha-mcp-gateway-*" -type f -exec cp {} release/ \;
+          ls -la release/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: ${{ steps.version.outputs.version }}
+          files: release/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  npm:
+    name: Publish NPM Package
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Get version
+        id: version
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/}"
+          VERSION="${VERSION#v}"
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Update package version
+        run: npm version ${{ steps.version.outputs.version }} --no-git-tag-version
+
+      - name: Remove bundled binaries
+        run: find bin/ -name "kirha-mcp-gateway-*" -not -name "*.js" -delete || true
+
+      - name: Publish to NPM
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

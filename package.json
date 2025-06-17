@@ -1,0 +1,52 @@
+{
+  "name": "@kirha/mcp-server",
+  "version": "1.0.0",
+  "description": "A high-performance Model Context Protocol server for Kirha AI",
+  "main": "bin/kirha-mcp-gateway.js",
+  "bin": {
+    "kirha-mcp-server": "./bin/kirha-mcp-gateway.js"
+  },
+  "scripts": {
+    "postinstall": "node scripts/install.js",
+    "test": "echo \"Tests run in Go environment. Use 'go test ./...' to run tests.\""
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "kirha",
+    "ai",
+    "tools",
+    "gateway",
+    "proxy",
+    "server"
+  ],
+  "author": "Kirha AI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://go.kirha.ai/kirha-mcp-gateway.git"
+  },
+  "bugs": {
+    "url": "https://go.kirha.ai/kirha-mcp-gateway/issues"
+  },
+  "homepage": "https://go.kirha.ai/kirha-mcp-gateway#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "files": [
+    "bin/kirha-mcp-gateway.js",
+    "scripts/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ]
+}

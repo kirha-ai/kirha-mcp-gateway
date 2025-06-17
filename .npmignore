@@ -1,0 +1,52 @@
+# Go source files (keep only compiled binaries)
+*.go
+go.mod
+go.sum
+vendor/
+
+# Development files
+.git/
+.github/
+.gitignore
+.env*
+*.log
+
+# Test files
+*_test.go
+test/
+coverage.*
+
+# Build artifacts (except final binaries)
+*.o
+*.a
+*.so
+*.dll
+
+# Documentation source
+docs/
+*.md
+!README.md
+!CHANGELOG.md
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker files
+Dockerfile*
+docker-compose*
+
+# CI/CD
+Makefile
+.travis.yml
+.circleci/
+
+# Dependency injection
+di/wire_gen.go
+
+# Keep only essential files
+!bin/
+!scripts/
+!LICENSE
