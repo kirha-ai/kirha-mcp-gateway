@@ -458,6 +458,6 @@ Execute a specific tool with provided arguments.
 
 For API support and questions:
 
-- 📧 Email: support@kirha.ai
-- 📖 Documentation: [docs.kirha.ai](https://docs.kirha.ai)
+- 📧 Email: developers@kirha.ai
+- 📖 Documentation: [https://kirha.gitbook.io/kirha-api](https://docs.kirha.ai)
 - 🐛 Issues: [GitHub Issues](https://go.kirha.ai/kirha-mcp-gateway/issues)
