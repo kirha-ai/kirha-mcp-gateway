@@ -225,6 +225,7 @@ async function main() {
     console.error('2. Verify the GitHub repository exists and has releases');
     console.error('3. Try installing again later');
     console.error('4. Download manually from: https://go.kirha.ai/kirha-mcp-gateway/releases');
+    console.error(`5. Place the binary manually in: ${binaryPath}`);
     
     process.exit(1);
   }

@@ -57,7 +57,7 @@ func New(config *Config) clients.KirhaClient {
 //   - errors.ErrInvalidResponse: If the response cannot be decoded
 //   - errors.ErrInternalServer: For other HTTP errors (status >= 400)
 func (c *client) ListTools(ctx context.Context) ([]tools.Tool, error) {
-	url := fmt.Sprintf("%s/mcp/v1/tools?limit=-1&vertical_id=%s", c.config.BaseURL, c.config.VerticalID)
+	url := fmt.Sprintf("%s/mcp/v1/tools?limit=99&vertical_id=%s", c.config.BaseURL, c.config.VerticalID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
@@ -90,6 +90,8 @@ func (c *client) ListTools(ctx context.Context) ([]tools.Tool, error) {
 		c.logger.ErrorContext(ctx, "failed to decode response", slog.String("error", err.Error()))
 		return nil, errors.ErrInvalidResponse
 	}
+
+	fmt.Println("LISTED TOOOLS:", len(response.Tools))
 
 	listedTools := make([]tools.Tool, len(response.Tools))
 	for i, tool := range response.Tools {
