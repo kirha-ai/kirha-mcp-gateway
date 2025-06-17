@@ -152,7 +152,7 @@ Add to your Claude Desktop configuration (`claude_desktop_config.json`):
   "mcpServers": {
     "kirha": {
       "command": "npx",
-      "args": ["@kirha/mcp-server", "stdio"],
+      "args": ["@kirha/mcp-gateway", "stdio"],
       "env": {
         "KIRHA_API_KEY": "your-api-key",
         "KIRHA_VERTICAL": "your-vertical-id"
@@ -172,7 +172,7 @@ Add to your Continue configuration:
     {
       "name": "kirha",
       "command": "npx",
-      "args": ["@kirha/mcp-server", "stdio"],
+      "args": ["@kirha/mcp-gateway", "stdio"],
       "env": {
         "KIRHA_API_KEY": "your-api-key",
         "KIRHA_VERTICAL": "your-vertical-id"
@@ -313,7 +313,7 @@ ENABLE_LOGS=true kirha-mcp-gateway stdio
 
 1. **Install the gateway:**
 ```bash
-npm install -g @kirha/mcp-server
+npm install -g @kirha/mcp-gateway
 ```
 
 2. **Set up environment:**
@@ -328,7 +328,7 @@ export KIRHA_VERTICAL="my-vertical"
   "mcpServers": {
     "kirha": {
       "command": "npx",
-      "args": ["@kirha/mcp-server", "stdio"],
+      "args": ["@kirha/mcp-gateway", "stdio"],
       "env": {
         "KIRHA_API_KEY": "sk-...",
         "KIRHA_VERTICAL": "my-vertical"

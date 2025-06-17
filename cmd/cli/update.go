@@ -40,8 +40,8 @@ func runUpdate(cmd *cobra.Command, args []string) error {
 
 	fmt.Printf("📦 Updating from %s to %s...\n", Version, latest)
 
-	// Run npm install -g @kirha/mcp-server@latest
-	updateCmd := exec.Command("npm", "install", "-g", "@kirha/mcp-server@latest")
+	// Run npm install -g @kirha/mcp-gateway@latest
+	updateCmd := exec.Command("npm", "install", "-g", "@kirha/mcp-gateway@latest")
 	updateCmd.Stdout = os.Stdout
 	updateCmd.Stderr = os.Stderr
 

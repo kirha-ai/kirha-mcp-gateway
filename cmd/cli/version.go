@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const Version = "0.0.3"
+const Version = "0.0.1"
 
 type VersionInfo struct {
 	Version   string `json:"version"`
@@ -60,7 +60,7 @@ func checkForUpdates() {
 
 		if latest != Version {
 			fmt.Fprintf(os.Stderr, "\n🔄 Update available: %s → %s\n", Version, latest)
-			fmt.Fprintf(os.Stderr, "Run 'npx @kirha/mcp-server@latest update' to update\n\n")
+			fmt.Fprintf(os.Stderr, "Run 'npx @kirha/mcp-gateway@latest update' to update\n\n")
 		}
 	}()
 }
@@ -70,7 +70,7 @@ func getLatestVersion() (string, error) {
 		Timeout: 5 * time.Second,
 	}
 
-	resp, err := client.Get("https://registry.npmjs.org/@kirha/mcp-server")
+	resp, err := client.Get("https://registry.npmjs.org/@kirha/mcp-gateway")
 	if err != nil {
 		return "", err
 	}

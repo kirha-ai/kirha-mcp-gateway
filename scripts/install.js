@@ -131,6 +131,7 @@ async function main() {
   const binDir = path.join(__dirname, '..', 'bin');
   const binaryPath = path.join(binDir, binaryInfo.name);
   const checksumPath = path.join(binDir, binaryInfo.checksumName);
+  const finalBinaryPath = path.join(binDir, 'kirha-mcp-gateway' + (os.platform() === 'win32' ? '.exe' : ''));
   
   console.log(`Installing kirha-mcp-gateway for ${os.platform()} ${os.arch()}`);
   console.log(`Binary: ${binaryInfo.name}`);
@@ -141,13 +142,13 @@ async function main() {
   }
   
   // Check if binary already exists
-  if (fs.existsSync(binaryPath)) {
+  if (fs.existsSync(finalBinaryPath)) {
     console.log('Binary already exists, skipping download');
     
     // Make binary executable on Unix systems
     if (os.platform() !== 'win32') {
       try {
-        fs.chmodSync(binaryPath, '755');
+        fs.chmodSync(finalBinaryPath, '755');
       } catch (error) {
         console.warn(`Failed to make binary executable: ${error.message}`);
       }
@@ -207,6 +208,16 @@ async function main() {
       }
     }
     
+    // Rename binary to remove platform suffix
+    try {
+      fs.renameSync(binaryPath, finalBinaryPath);
+      console.log(`Renamed ${binaryInfo.name} to ${path.basename(finalBinaryPath)}`);
+    } catch (error) {
+      console.error(`Failed to rename binary: ${error.message}`);
+      fs.unlinkSync(binaryPath);
+      process.exit(1);
+    }
+    
     console.log(`✅ kirha-mcp-gateway ${release.tag_name} is ready for ${os.platform()} ${os.arch()}`);
     
   } catch (error) {
@@ -225,7 +236,7 @@ async function main() {
     console.error('2. Verify the GitHub repository exists and has releases');
     console.error('3. Try installing again later');
     console.error('4. Download manually from: https://go.kirha.ai/kirha-mcp-gateway/releases');
-    console.error(`5. Place the binary manually in: ${binaryPath}`);
+    console.error(`5. Place the binary manually in: ${finalBinaryPath}`);
     
     process.exit(1);
   }

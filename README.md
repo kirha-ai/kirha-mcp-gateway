@@ -23,11 +23,11 @@ The npm package automatically downloads the appropriate binary for your platform
 
 ```bash
 # Run directly with npx (downloads binary on first use)
-npx @kirha/mcp-server stdio
+npx @kirha/mcp-gateway stdio
 
 # Or install globally
-npm install -g @kirha/mcp-server
-kirha-mcp-server stdio
+npm install -g @kirha/mcp-gateway
+kirha-mcp-gateway stdio
 ```
 
 **Supported Platforms:**
@@ -65,10 +65,10 @@ export KIRHA_VERTICAL="your-vertical"
 
 ```bash
 # For stdio transport (typical MCP usage)
-npx @kirha/mcp-server stdio
+npx @kirha/mcp-gateway stdio
 
 # For HTTP transport
-npx @kirha/mcp-server http
+npx @kirha/mcp-gateway http
 ```
 
 4. **Connect your MCP client** to the gateway and start using Kirha AI tools!
@@ -84,7 +84,7 @@ Add this to your Claude Desktop configuration file:
   "mcpServers": {
     "kirha": {
       "command": "npx",
-      "args": ["@kirha/mcp-server", "stdio"],
+      "args": ["@kirha/mcp-gateway", "stdio"],
       "env": {
         "KIRHA_API_KEY": "your-api-key",
         "KIRHA_VERTICAL": "your-vertical"
