@@ -24,7 +24,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://go.kirha.ai/kirha-mcp-gateway.git"
+    "url": "https://github.com/kirha-ai/kirha-mcp-gateway"
   },
   "bugs": {
     "url": "https://go.kirha.ai/kirha-mcp-gateway/issues"
