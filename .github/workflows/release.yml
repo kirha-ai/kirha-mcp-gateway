@@ -143,16 +143,6 @@ jobs:
           node-version: '18'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Get version
-        id: version
-        run: |
-          VERSION="${GITHUB_REF#refs/tags/}"
-          VERSION="${VERSION#v}"
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-
-      - name: Update package version
-        run: npm version ${{ steps.version.outputs.version }} --no-git-tag-version
-
       - name: Remove bundled binaries
         run: find bin/ -name "kirha-mcp-gateway-*" -not -name "*.js" -delete || true
 

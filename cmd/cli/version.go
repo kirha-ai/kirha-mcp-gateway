@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const Version = "0.0.2"
+const Version = "0.0.3"
 
 type VersionInfo struct {
 	Version   string `json:"version"`

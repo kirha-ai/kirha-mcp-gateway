@@ -1,6 +1,6 @@
 {
   "name": "@kirha/mcp-server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A high-performance Model Context Protocol server for Kirha AI",
   "main": "bin/kirha-mcp-gateway.js",
   "bin": {
