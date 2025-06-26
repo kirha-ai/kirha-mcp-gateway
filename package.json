@@ -1,6 +1,6 @@
 {
   "name": "@kirha/mcp-gateway",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "The MCP Gateway is the entrypoint to all data providers featured with Kirha, providing a one-to-all solution for accessing multiple private data sources",
   "main": "bin/kirha-mcp-gateway.js",
   "bin": {
