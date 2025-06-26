@@ -91,8 +91,6 @@ func (c *client) ListTools(ctx context.Context) ([]tools.Tool, error) {
 		return nil, errors.ErrInvalidResponse
 	}
 
-	fmt.Println("LISTED TOOOLS:", len(response.Tools))
-
 	listedTools := make([]tools.Tool, len(response.Tools))
 	for i, tool := range response.Tools {
 		listedTools[i] = tools.Tool{
