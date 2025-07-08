@@ -1,0 +1,44 @@
+{
+  "dxt_version": "0.1",
+  "name": "kirha-crypto-mcp",
+  "display_name": "Kirha Crypto Mcp",
+  "version": "1.0.0",
+  "description": "access to premium private date in real-time",
+  "author": {
+    "name": "kirha_ai",
+    "email": "developers@kirha.ai",
+    "url": "https://kirha.ai"
+  },
+  "homepage": "https://kirha.ai",
+  "icon": "icon.png",
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/index.js"],
+      "env": {
+        "API_KEY": "${user_config.api_key}",
+        "TOOL_PLANNING_MODE": "${user_config.tool_planning_mode}"
+      }
+    }
+  },
+  "compatibility": {},
+  "user_config": {
+    "api_key": {
+      "type": "string",
+      "title": "Api Key",
+      "description": "get your api key on https://app.kirha.ai/dashboard/api/api-key",
+      "required": true,
+      "sensitive": true
+    },
+    "tool_planning_mode": {
+      "type": "boolean",
+      "title": "Tool Planning Mode",
+      "description": "Enable \"plan mode\" ${user_config.api_key}",
+      "default": false,
+      "required": false
+    }
+  },
+  "license": "ISC"
+}
