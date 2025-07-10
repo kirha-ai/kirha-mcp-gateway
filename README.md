@@ -8,8 +8,7 @@
 <h3 align="center">The AI bridge to reality</h3>
 
 
-The golden light of private data will never shine on your AI queries if you can't find what you need and pay for it instantly.<br/>
-**Kirha MCP Gateway** is an MCP (Model Context Protocol) that handles exactly that for you: routing and micropayment.
+The golden light of private data will never shine on your AI queries if you can't find what you need and pay for it instantly.<br/>**Kirha MCP Gateway** is an MCP (Model Context Protocol) that handles exactly that for you: routing and micropayment.
 
 
 ## Beta Scope
