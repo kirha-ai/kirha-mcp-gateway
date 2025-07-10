@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://kirha.ai" target="_blank">
-    <img src="assets/logo.png" width="2500" alt="Kirha Logo">
+    <img src="https://raw.githubusercontent.com/kirha-ai/kirha-mcp-gateway/refs/heads/main/assets/logo.png" width="2500" alt="Kirha Logo">
   </a>
 </p>
 
