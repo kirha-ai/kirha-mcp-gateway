@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://kirha.ai" target="_blank">
-    <img src="assets/logo.png" width="200" alt="Bright Data Logo">
+    <img src="assets/logo.png" width="200" alt="Kirha Logo">
   </a>
 </p>
 
@@ -8,13 +8,21 @@
 <h3 align="center">The AI bridge to reality</h3>
 
 
-**Kirha MCP Gateway** is an MCP (Model Context Protocol) server that provides access to **Kirha's Tool Planning** system.
+The golden light of private data will never shine on your AI queries if you can't find what you need and pay for it instantly.
+**Kirha MCP Gateway** is an MCP (Model Context Protocol) that handles exactly that for you: routing and micropayment.
+
+
+## Beta Scope
+
+Kirha launched on the Crypto vertical with providers like Dune, Defillama, [Zerion](https://zerion.io/blog/how-kirha-leverages-zerion-api-to-revolutionize-crypto-data-access/), Xverse, Coingecko, Cielo...
+Access live market intelligence & wallets' transactions and relations, whales' movements, sentiment analysis, and much more from the comfort of your favourite [AI Client](https://github.com/kirha-ai/mcp-installer?tab=readme-ov-file#supported-clients)
+Kirha is under free Beta. Request an access code [here](https://app.kirha.ai/auth/claim-invite-code)
 
 ## Why Kirha MCP Gateway?
 
-Kirha MCP Gateway is designed to simplify access to high-value, aggregated data sources through a single, unified interface. Here are the key advantages:
+Kirha MCP Gateway is designed to simplify access to high-value, aggregated data sources through a single, unified interface.
 
-- **Unified Access Point**: Access multiple premium data sources through a single MCP endpoint. No need to integrate or authenticate separately with multiple APIs.
+- **One Auth to rule them all**: Access multiple premium data sources through a single MCP endpoint. You don't need to integrate or authenticate separately with multiple APIs.
 
 - **Multi-API Composition**: In a single request, the gateway can compose and aggregate data from several APIs simultaneously. This reduces complexity and response time for complex queries.
 
@@ -23,7 +31,9 @@ Kirha MCP Gateway is designed to simplify access to high-value, aggregated data 
 ## Tools
 
 By default, the gateway operates in **auto mode**, where both planning and execution are performed automatically in a single request.
+Planning is deterministic: semantically identical prompts yield the same composition of tool(s).
 If the environment variable `TOOL_PLAN_MODE_ENABLED` is set to `true`, the gateway switches to **planning mode**, which separates the planning and execution steps.
+When we ship Kirha's payment, you will be able to accept or reject the plan before it is executed.
 
 ### Auto mode
 
@@ -36,7 +46,7 @@ If the environment variable `TOOL_PLAN_MODE_ENABLED` is set to `true`, the gatew
 
 ## Installation
 
-### Kirha Mcp Installer (recommended)  
+### Kirha MCP Installer (recommended)  
 
 You can install and run the Kirha MCP Gateway using the [Kirha MCP Installer](https://github.com/kirha-ai/mcp-installer?tab=readme-ov-file#installation).
 
