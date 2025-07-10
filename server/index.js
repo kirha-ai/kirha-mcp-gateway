@@ -46,7 +46,7 @@ const toolsMetadataByVertical = {
 
 const toolsMetadata = toolsMetadataByVertical[VERTICAL_ID];
 
-if (!toolsMetadataByVertical) {
+if (!toolsMetadata) {
   throw new Error("Selected vertical not supported yet");
 }
 
