@@ -18,7 +18,7 @@
       "command": "node",
       "args": ["${__dirname}"],
       "env": {
-        "API_KEY": "${user_config.api_key}",
+        "KIRHA_API_KEY": "${user_config.kirha_api_key}",
         "TOOL_PLAN_MODE_ENABLED": "${user_config.tool_plan_mode_enabled}",
         "VERTICAL_ID": "crypto"
       }
@@ -26,9 +26,9 @@
   },
   "compatibility": {},
   "user_config": {
-    "api_key": {
+    "kirha_api_key": {
       "type": "string",
-      "title": "Api Key",
+      "title": "Kirha Api Key",
       "description": "get your api key on https://app.kirha.ai/dashboard/api/api-key",
       "required": true,
       "sensitive": true

@@ -7,7 +7,7 @@ const server = new McpServer({
   version: "1.0.0",
 });
 
-const API_KEY = process.env.API_KEY;
+const KIRHA_API_KEY = process.env.KIRHA_API_KEY;
 const TOOL_PLAN_MODE_ENABLED = process.env.TOOL_PLAN_MODE_ENABLED === "true" ?? false;
 const VERTICAL_ID = process.env.VERTICAL_ID;
 
@@ -52,7 +52,7 @@ if (!toolsMetadataByVertical) {
 
 const headers = {
   "Content-Type": "application/json",
-  Authorization: `Bearer ${API_KEY}`,
+  Authorization: `Bearer ${KIRHA_API_KEY}`,
 };
 
 const kirhaApiUrl = "https://api.kirha.ai/chat/v1";
