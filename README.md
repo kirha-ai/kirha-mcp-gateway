@@ -8,10 +8,7 @@
 <h3 align="center">The AI bridge to reality</h3>
 
 
-# Kirha MCP Gateway
-
-**Kirha MCP Gateway** is an MCP (Model Context Protocol) server that provides access to **Kirha's Tool Planning** system.  
-It allows you to easily prepare, plan, and execute specialized tools, such as for domain-related queries.
+**Kirha MCP Gateway** is an MCP (Model Context Protocol) server that provides access to **Kirha's Tool Planning** system.
 
 ## Why Kirha MCP Gateway?
 
