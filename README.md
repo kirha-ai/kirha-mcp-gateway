@@ -15,7 +15,7 @@ The golden light of private data will never shine on your AI queries if you can'
 
 Kirha launched on the Crypto vertical with providers like Dune, Defillama, [Zerion](https://zerion.io/blog/how-kirha-leverages-zerion-api-to-revolutionize-crypto-data-access/), Xverse, Coingecko, Cielo...
 Access live market intelligence & wallets' transactions and relations, whales' movements, sentiment analysis, and much more from the comfort of your favourite [AI Client](https://github.com/kirha-ai/mcp-installer?tab=readme-ov-file#supported-clients)
-Kirha is under free Beta. Request an access code [here](https://app.kirha.ai/auth/claim-invite-code)
+Kirha is under free Beta. Request an access code [here](https://app.kirha.ai/auth/claim-invite-code).
 
 ## Why Kirha MCP Gateway?
 
