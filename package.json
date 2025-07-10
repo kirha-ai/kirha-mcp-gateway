@@ -1,12 +1,15 @@
 {
   "name": "@kirha/mcp-gateway",
   "homepage": "https://kirha.ai",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "The Kirha MCP Gateway provides unified access to Kirha Tool Planning through the Model Context Protocol (MCP), enabling advanced tool composition and execution for LLM interfaces.",
   "main": "server/index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "kirha-mcp-gateway": "./server/index.js"
   },
   "keywords": [
     "mcp",
