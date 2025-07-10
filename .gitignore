@@ -30,5 +30,5 @@ bin/
 
 *.dxt
 .idea
-kirha-crypto-mcp.iml
+kirha-mcp-gateway.iml
 node_modules
