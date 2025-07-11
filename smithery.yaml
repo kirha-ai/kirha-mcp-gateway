@@ -1,9 +1,12 @@
-runtime: "typescript"
+runtime: "container"
+build:
+  dockerfile: "Dockerfile"
+  dockerBuildPath: "."
 startCommand:
   type: "http"
   configSchema:
     type: "object"
-    required: ["kirhaApiKey", "verticalId"]
+    required: [ "kirhaApiKey", "verticalId" ]
     properties:
       kirhaApiKey:
         type: "string"
@@ -13,14 +16,16 @@ startCommand:
         type: "string"
         title: "Vertical ID"
         description: "The vertical ID for your use case"
-        enum: ["crypto"]
+        enum: [ "crypto" ]
         default: "crypto"
       toolPlanModeEnabled:
         type: "boolean"
         title: "Tool Plan Mode Enabled"
         description: "Enable tool plan mode for separate planning and execution steps"
         default: false
-  exampleConfig:
-    kirhaApiKey: "your-kirha-api-key-here"
-    verticalId: "crypto"
-    toolPlanModeEnabled: false
+    exampleConfig:
+      kirhaApiKey: "your-kirha-api-key-here"
+      verticalId: "crypto"
+      toolPlanModeEnabled: false
+  env:
+    NODE_ENV: "production"
