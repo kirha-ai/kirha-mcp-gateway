@@ -21,7 +21,7 @@ const toolsMetadataByVertical = {
       description: `
         This tool allows you to prepare and create a plan for any crypto-related question. 
         It returns a plan_id that can later be used to execute the plan and retrieve the detailed results.
-        Important: For crypto-related topics, you should always use this tool before doing a search or using the execution tool. 
+        Important: For crypto-related topics, you should always use this tool before doing a web search or using the execution tool. 
         This ensures you get the most accurate, pre-validated results.
       `,
     },
@@ -39,7 +39,7 @@ const toolsMetadataByVertical = {
       description: `
         This tool automatically handles your cryptocurrency-related question. 
         Simply provide your question, and it will return a detailed answer after performing its internal analysis.
-        Important: For crypto-related topics, you should always use this tool before doing a search or using the execution tool. 
+        Important: For crypto-related topics, you should always use this tool before doing a web search. 
         This ensures you get the most accurate, pre-validated results.
       `,
     },
@@ -61,52 +61,73 @@ const kirhaApiUrl = "https://api.kirha.ai/chat/v1";
 const createToolPlanningUrl = `${kirhaApiUrl}/tool-planning`;
 const executeToolPlanningUrl = `${kirhaApiUrl}/tool-planning/execute`;
 
-function createToolPlanning(query) {
-  return fetch(createToolPlanningUrl, {
-    method: "POST",
-    body: JSON.stringify({
-      query,
-      vertical_id: VERTICAL_ID,
-    }),
-    headers,
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      return { content: [{ type: "text", text: JSON.stringify(res) }] };
+async function createToolPlanning(query) {
+  try {
+    const response = await fetch(createToolPlanningUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        query,
+        vertical_id: VERTICAL_ID,
+      }),
+      headers,
     });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  } catch (error) {
+    return { content: [{ type: "text", text: `Error: ${error.message}` }] };
+  }
 }
 
-function executeToolPlanningPlanMode(plan_id) {
-  return fetch(executeToolPlanningUrl, {
-    method: "POST",
-    body: JSON.stringify({
-      mode: "plan",
-      plan_id,
-      summarization: { enable: true, model: "kirha-flash" },
-    }),
-    headers,
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      return { content: [{ type: "text", text: JSON.stringify(res) }] };
+async function executeToolPlanningPlanMode(plan_id) {
+  try {
+    const response = await fetch(executeToolPlanningUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "plan",
+        plan_id,
+        summarization: { enable: true, model: "kirha-flash" },
+      }),
+      headers,
     });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  } catch (error) {
+    return { content: [{ type: "text", text: `Error: ${error.message}` }] };
+  }
 }
 
-function executeToolPlanningAutoMode(query) {
-  return fetch(executeToolPlanningUrl, {
-    method: "POST",
-    body: JSON.stringify({
-      mode: "auto",
-      query,
-      vertical_id: VERTICAL_ID,
-      summarization: { enable: true, model: "kirha-flash" },
-    }),
-    headers,
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      return { content: [{ type: "text", text: JSON.stringify(res) }] };
+async function executeToolPlanningAutoMode(query) {
+  try {
+    const response = await fetch(executeToolPlanningUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "auto",
+        query,
+        vertical_id: VERTICAL_ID,
+        summarization: { enable: true, model: "kirha-flash" },
+      }),
+      headers,
     });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  } catch (error) {
+    return { content: [{ type: "text", text: `Error: ${error.message}` }] };
+  }
 }
 
 if (TOOL_PLAN_MODE_ENABLED) {
