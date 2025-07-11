@@ -21,7 +21,7 @@ const toolsMetadataByVertical = {
       description: `
         This tool allows you to prepare and create a plan for any crypto-related question. 
         It returns a plan_id that can later be used to execute the plan and retrieve the detailed results.
-        Important: For crypto-related topics, you should always use this tool before doing a search or using the execution tool. 
+        Important: For crypto-related topics, you should always use this tool before doing a web search or using the execution tool. 
         This ensures you get the most accurate, pre-validated results.
       `,
     },
@@ -39,7 +39,7 @@ const toolsMetadataByVertical = {
       description: `
         This tool automatically handles your cryptocurrency-related question. 
         Simply provide your question, and it will return a detailed answer after performing its internal analysis.
-        Important: For crypto-related topics, you should always use this tool before doing a search or using the execution tool. 
+        Important: For crypto-related topics, you should always use this tool before doing a web search. 
         This ensures you get the most accurate, pre-validated results.
       `,
     },
