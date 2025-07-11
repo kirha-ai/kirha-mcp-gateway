@@ -169,15 +169,12 @@ const port = process.env.PORT || 3000;
 
 async function startServer() {
   if (isHttpMode) {
-    // HTTP mode for Smithery
     const { createServer } = await import('http');
     const { URL } = await import('url');
     
-    // Store transports by session ID
     const transports = {};
     
     const httpServer = createServer((req, res) => {
-      // Add CORS headers
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -189,7 +186,6 @@ async function startServer() {
       }
       
       if (req.url === '/mcp' && req.method === 'GET') {
-        // SSE endpoint for establishing the stream
         console.log('Received GET request to /mcp (establishing SSE stream)');
         try {
           const transport = new SSEServerTransport('/messages', res);
@@ -210,7 +206,6 @@ async function startServer() {
           }
         }
       } else if (req.url?.startsWith('/messages') && req.method === 'POST') {
-        // Messages endpoint for receiving client JSON-RPC requests
         console.log('Received POST request to /messages');
         const url = new URL(req.url, `http://localhost:${port}`);
         const sessionId = url.searchParams.get('sessionId');
@@ -232,7 +227,6 @@ async function startServer() {
         
         transport.handleRequest(req, res);
       } else if (req.url === '/tools' && req.method === 'GET') {
-        // Return tool list for Smithery scanning
         const tools = [];
         if (TOOL_PLAN_MODE_ENABLED) {
           tools.push({
@@ -268,7 +262,6 @@ async function startServer() {
       console.log(`MCP server listening on port ${port}`);
     });
   } else {
-    // STDIO mode for Claude Desktop
     const transport = new StdioServerTransport();
     server.connect(transport);
   }
