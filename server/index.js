@@ -61,52 +61,73 @@ const kirhaApiUrl = "https://api.kirha.ai/chat/v1";
 const createToolPlanningUrl = `${kirhaApiUrl}/tool-planning`;
 const executeToolPlanningUrl = `${kirhaApiUrl}/tool-planning/execute`;
 
-function createToolPlanning(query) {
-  return fetch(createToolPlanningUrl, {
-    method: "POST",
-    body: JSON.stringify({
-      query,
-      vertical_id: VERTICAL_ID,
-    }),
-    headers,
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      return { content: [{ type: "text", text: JSON.stringify(res) }] };
+async function createToolPlanning(query) {
+  try {
+    const response = await fetch(createToolPlanningUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        query,
+        vertical_id: VERTICAL_ID,
+      }),
+      headers,
     });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  } catch (error) {
+    return { content: [{ type: "text", text: `Error: ${error.message}` }] };
+  }
 }
 
-function executeToolPlanningPlanMode(plan_id) {
-  return fetch(executeToolPlanningUrl, {
-    method: "POST",
-    body: JSON.stringify({
-      mode: "plan",
-      plan_id,
-      summarization: { enable: true, model: "kirha-flash" },
-    }),
-    headers,
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      return { content: [{ type: "text", text: JSON.stringify(res) }] };
+async function executeToolPlanningPlanMode(plan_id) {
+  try {
+    const response = await fetch(executeToolPlanningUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "plan",
+        plan_id,
+        summarization: { enable: true, model: "kirha-flash" },
+      }),
+      headers,
     });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  } catch (error) {
+    return { content: [{ type: "text", text: `Error: ${error.message}` }] };
+  }
 }
 
-function executeToolPlanningAutoMode(query) {
-  return fetch(executeToolPlanningUrl, {
-    method: "POST",
-    body: JSON.stringify({
-      mode: "auto",
-      query,
-      vertical_id: VERTICAL_ID,
-      summarization: { enable: true, model: "kirha-flash" },
-    }),
-    headers,
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      return { content: [{ type: "text", text: JSON.stringify(res) }] };
+async function executeToolPlanningAutoMode(query) {
+  try {
+    const response = await fetch(executeToolPlanningUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        mode: "auto",
+        query,
+        vertical_id: VERTICAL_ID,
+        summarization: { enable: true, model: "kirha-flash" },
+      }),
+      headers,
     });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+  } catch (error) {
+    return { content: [{ type: "text", text: `Error: ${error.message}` }] };
+  }
 }
 
 if (TOOL_PLAN_MODE_ENABLED) {
