@@ -2,6 +2,7 @@
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { z } from "zod";
 
 const server = new McpServer({
@@ -162,5 +163,115 @@ if (TOOL_PLAN_MODE_ENABLED) {
   );
 }
 
-const transport = new StdioServerTransport();
-server.connect(transport);
+// Check if running in HTTP mode (for Smithery) or STDIO mode (for Claude Desktop)
+const isHttpMode = process.env.MCP_TRANSPORT === 'http' || process.env.PORT || process.argv.includes('--http');
+const port = process.env.PORT || 3000;
+
+async function startServer() {
+  if (isHttpMode) {
+    // HTTP mode for Smithery
+    const { createServer } = await import('http');
+    const { URL } = await import('url');
+    
+    // Store transports by session ID
+    const transports = {};
+    
+    const httpServer = createServer((req, res) => {
+      // Add CORS headers
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      
+      if (req.method === 'OPTIONS') {
+        res.writeHead(200);
+        res.end();
+        return;
+      }
+      
+      if (req.url === '/mcp' && req.method === 'GET') {
+        // SSE endpoint for establishing the stream
+        console.log('Received GET request to /mcp (establishing SSE stream)');
+        try {
+          const transport = new SSEServerTransport('/messages', res);
+          const sessionId = transport.sessionId;
+          transports[sessionId] = transport;
+          
+          transport.onclose = () => {
+            console.log(`SSE transport closed for session ${sessionId}`);
+            delete transports[sessionId];
+          };
+          
+          server.connect(transport);
+          console.log(`Established SSE stream with session ID: ${sessionId}`);
+        } catch (error) {
+          console.error('Error establishing SSE stream:', error);
+          if (!res.headersSent) {
+            res.status(500).send('Error establishing SSE stream');
+          }
+        }
+      } else if (req.url?.startsWith('/messages') && req.method === 'POST') {
+        // Messages endpoint for receiving client JSON-RPC requests
+        console.log('Received POST request to /messages');
+        const url = new URL(req.url, `http://localhost:${port}`);
+        const sessionId = url.searchParams.get('sessionId');
+        
+        if (!sessionId) {
+          console.error('No session ID provided in request URL');
+          res.writeHead(400);
+          res.end('Missing sessionId parameter');
+          return;
+        }
+        
+        const transport = transports[sessionId];
+        if (!transport) {
+          console.error(`No transport found for session ID: ${sessionId}`);
+          res.writeHead(404);
+          res.end('Session not found');
+          return;
+        }
+        
+        transport.handleRequest(req, res);
+      } else if (req.url === '/tools' && req.method === 'GET') {
+        // Return tool list for Smithery scanning
+        const tools = [];
+        if (TOOL_PLAN_MODE_ENABLED) {
+          tools.push({
+            name: toolsMetadata.createToolPlanning.name,
+            title: toolsMetadata.createToolPlanning.title,
+            description: toolsMetadata.createToolPlanning.description
+          });
+          tools.push({
+            name: toolsMetadata.executePlanToolPlanning.name,
+            title: toolsMetadata.executePlanToolPlanning.title,
+            description: toolsMetadata.executePlanToolPlanning.description
+          });
+        } else {
+          tools.push({
+            name: toolsMetadata.executeAutoToolPlanning.name,
+            title: toolsMetadata.executeAutoToolPlanning.title,
+            description: toolsMetadata.executeAutoToolPlanning.description
+          });
+        }
+        
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ tools }));
+      } else if (req.url === '/health' && req.method === 'GET') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'ok' }));
+      } else {
+        res.writeHead(404);
+        res.end('Not Found');
+      }
+    });
+    
+    httpServer.listen(port, '0.0.0.0', () => {
+      console.log(`MCP server listening on port ${port}`);
+    });
+  } else {
+    // STDIO mode for Claude Desktop
+    const transport = new StdioServerTransport();
+    server.connect(transport);
+  }
+}
+
+startServer().catch(console.error);

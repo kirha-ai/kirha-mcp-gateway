@@ -11,6 +11,9 @@ RUN npm install
 # Copy application code
 COPY . .
 
+# Set environment variable for HTTP mode
+ENV MCP_TRANSPORT=http
+
 # Expose the port (Smithery will handle the actual port mapping)
 EXPOSE 3000
 
