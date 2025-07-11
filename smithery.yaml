@@ -1,0 +1,26 @@
+runtime: "typescript"
+  startCommand:
+    type: "http"
+    configSchema:
+      type: "object"
+      required: ["kirhaApiKey", "verticalId"]
+      properties:
+        kirhaApiKey:
+          type: "string"
+          title: "Kirha API Key"
+          description: "Your Kirha API key for authentication"
+        verticalId:
+          type: "string"
+          title: "Vertical ID"
+          description: "The vertical ID for your use case"
+          enum: ["crypto"]
+          default: "crypto"
+        toolPlanModeEnabled:
+          type: "boolean"
+          title: "Tool Plan Mode Enabled"
+          description: "Enable tool plan mode for separate planning and execution steps"
+          default: false
+    exampleConfig:
+      kirhaApiKey: "your-kirha-api-key-here"
+      verticalId: "crypto"
+      toolPlanModeEnabled: false
