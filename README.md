@@ -9,7 +9,7 @@
 
 
 The golden light of private data will never shine on your AI queries if you can't find what you need and pay for it instantly.
-**Kirha MCP Gateway** is an MCP (Model Context Protocol) that handles exactly that for you: routing and micropayment.
+**Kirha MCP Gateway** is an MCP (Model Context Protocol) server that handles exactly that for you: routing and micropayment.
 
 ## Beta Scope
 
@@ -40,7 +40,7 @@ When we ship Kirha's payment, you will be able to accept or reject the plan befo
 
 ### Plan mode
 
-- `create-tool-planning`: Prepares a query and generates a plan_id for later execution. This tool allows creating a plan in advance, which can then be reviewed before being executed.
+- `create-tool-planning`: Prepares a query and generates a plan_id for later execution. This tool enables creating a plan in advance, which can then be reviewed before execution.
 - `execute-tool-planning`: Executes a previously created plan by providing its plan_id. This step runs the predefined plan and returns the result.
 
 ## Installation
