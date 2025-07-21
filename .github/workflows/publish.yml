@@ -27,6 +27,8 @@ jobs:
   build-dxt:
     name: Build and upload DXT pack
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -52,4 +54,4 @@ jobs:
           files: |
             kirha-mcp-gateway.dxt
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
