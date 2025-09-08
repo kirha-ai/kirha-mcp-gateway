@@ -7,7 +7,7 @@ const EnvSchema = z.object({
   KIRHA_API_KEY: z.string().optional(),
   PLAN_MODE_ENABLED: z.string().optional(),
   VERTICAL_ID: z.string(),
-  PORT: z.number().optional(),
+  PORT: z.coerce.number().optional(),
 });
 
 const McpServerConfigSchema = z.object({
@@ -87,8 +87,8 @@ export type Config = {
   tools: z.infer<typeof ToolConfigSchema>[];
 };
 
-const searchModeTools = ["searchKirha"] as const;
-const planModeTools = ["createKirhaSearchPlan", "runKirhaSearchPlan"] as const;
+const searchModeTools = [KihraToolNames.SearchKirha] as const;
+const planModeTools = [KihraToolNames.CreateKirhaSearchPlan, KihraToolNames.RunKirhaSearchPlan] as const;
 
 export const config: Config = (() => {
   const parsedEnv = EnvSchema.safeParse(process.env);
