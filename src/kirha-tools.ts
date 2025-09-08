@@ -37,7 +37,7 @@ async function searchKirhaToolHandler({ query }: { query: string }, config: Conf
     }
 
     const result = await response.json();
-    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+    return { content: [{ type: "text" as const, text: JSON.stringify(result) }] };
   } catch (error) {
     return {
       content: [
@@ -69,7 +69,7 @@ async function createKirhaSearchPlanHandler({ query }: { query: string }, config
     }
 
     const result = await response.json();
-    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+    return { content: [{ type: "text" as const, text: JSON.stringify(result) }] };
   } catch (error) {
     return {
       content: [
@@ -103,7 +103,7 @@ async function runKirhaSearchPlanHandler({ planId }: { planId: string }, config:
     }
 
     const result = await response.json();
-    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+    return { content: [{ type: "text" as const, text: JSON.stringify(result) }] };
   } catch (error) {
     return {
       content: [
