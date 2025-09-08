@@ -3,13 +3,15 @@
   "homepage": "https://kirha.ai",
   "version": "0.0.8",
   "description": "The Kirha MCP Gateway provides unified access to Kirha Tool Planning through the Model Context Protocol (MCP), enabling advanced tool composition and execution for LLM interfaces.",
-  "main": "server/index.js",
+  "main": "build/index.js",
   "type": "module",
   "scripts": {
+    "build": "tsc",
+    "start": "node ./build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "kirha-mcp-gateway": "./server/index.js"
+    "kirha-mcp-gateway": "build/index.js"
   },
   "keywords": [
     "mcp",
@@ -31,11 +33,15 @@
     "url": "https://github.com/kirha-ai/kirha-mcp-gateway/issues"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.1.1"
+    "@biomejs/biome": "^2.1.1",
+    "@types/node": "^24.3.1",
+    "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@hono/node-server": "^1.19.1",
     "@modelcontextprotocol/sdk": "^1.13.3",
-    "init": "^0.1.2",
+    "fetch-to-node": "^2.1.0",
+    "hono": "^4.9.6",
     "zod": "^3.25.67"
   }
 }

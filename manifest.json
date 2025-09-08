@@ -13,10 +13,10 @@
   "icon": "icon.png",
   "server": {
     "type": "node",
-    "entry_point": "server/index.js",
+    "entry_point": "build/index.js",
     "mcp_config": {
       "command": "node",
-      "args": ["${__dirname}/server/index.js"],
+      "args": ["${__dirname}/build/index.js"],
       "env": {
         "KIRHA_API_KEY": "${user_config.kirha_api_key}",
         "TOOL_PLAN_MODE_ENABLED": "${user_config.tool_plan_mode_enabled}",

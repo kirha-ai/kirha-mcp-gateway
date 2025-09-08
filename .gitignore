@@ -32,3 +32,5 @@ bin/
 .idea
 kirha-mcp-gateway.iml
 node_modules
+
+build
