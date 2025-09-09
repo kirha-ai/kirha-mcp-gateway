@@ -113,8 +113,6 @@ async function runKirhaSearchPlanHandler({ planId }: { planId: string }, config:
   }
 }
 
-/** Run Kirha Search Plan Tool */
-
 export type ToolDefinition = {
   inputSchema: ZodRawShape;
   // biome-ignore lint/suspicious/noExplicitAny: <_explanation>

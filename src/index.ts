@@ -114,7 +114,7 @@ if (isHttpMode) {
 }
 
 if (isStdioMode) {
-  console.log("Start HTTP Mcp server");
+  console.log("Start STDIO Mcp server");
   (async () => startStdioServer(config))();
 }
 
