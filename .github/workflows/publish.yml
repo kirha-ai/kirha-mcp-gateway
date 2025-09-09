@@ -45,6 +45,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build project
+        run: npm build
+
       - name: Build DXT pack
         run: dxt pack
 
