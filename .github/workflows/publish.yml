@@ -19,6 +19,12 @@ jobs:
           node-version: 20
           registry-url: 'https://registry.npmjs.org/'
 
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
       - name: Publish to npm
         run: npm publish --access public
         env:
@@ -46,7 +52,7 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: npm build
+        run: npm run build
 
       - name: Build DXT pack
         run: dxt pack
