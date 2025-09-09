@@ -1,0 +1,31 @@
+services:
+  mcp:
+    container_name: kirha-mcp-gateway
+    image: kirha-mcp-gateway:local
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+      - PORT=3400
+      - MODE=http
+      - VERTICAL_ID=crypto
+      - PLAN_MODE_ENABLED=true
+    ports:
+      - "3400:3400"
+    volumes:
+      - ./config.json:/app/config.json:ro
+      - ./manifest.json:/app/manifest.json:ro
+
+  mcp-inspector:
+    image: ghcr.io/modelcontextprotocol/inspector:latest
+    container_name: mcp-inspector
+    ports:
+      - "6274:6274"
+      - "6277:6277"
+    environment:
+      - CLIENT_PORT=6274
+      - SERVER_PORT=6277
+      - MCP_AUTO_OPEN_ENABLED=false
+      - DANGEROUSLY_OMIT_AUTH=true
+    domainname: local

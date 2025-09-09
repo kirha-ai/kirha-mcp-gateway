@@ -1,8 +1,7 @@
 {
   "mcp": {
     "name": "kirha-crypto",
-    "version": "1.0.0",
-    "mode": "stdio"
+    "version": "1.0.0"
   },
   "api": {
     "summarization": {

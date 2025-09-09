@@ -8,12 +8,12 @@ const EnvSchema = z.object({
   PLAN_MODE_ENABLED: z.string().optional(),
   VERTICAL_ID: z.string(),
   PORT: z.coerce.number().optional(),
+  MODE: z.enum(["stdio", "http"]).optional(),
 });
 
 const McpServerConfigSchema = z.object({
   name: z.string(),
   version: z.string(),
-  mode: z.enum(["stdio", "http"]),
 });
 
 const ApiConfigSchema = z.object({
@@ -42,7 +42,7 @@ export const configFileSchema = z.object({
     z.object({
       id: z.string(),
       tools: z.array(ToolConfigSchema),
-    }),
+    })
   ),
 });
 
@@ -60,7 +60,9 @@ const __dirname = getCurrentDirname();
 
 function loadConfig(): ConfigFile {
   const path =
-    __dirname === process.cwd() ? join(__dirname, "config.json") : join(dirname(__dirname), "config.json");
+    __dirname === process.cwd()
+      ? join(__dirname, "config.json")
+      : join(dirname(__dirname), "config.json");
 
   try {
     const configData = readFileSync(path, "utf-8");
@@ -70,7 +72,9 @@ function loadConfig(): ConfigFile {
     console.error(`Error loading configuration from ${path}:`, error);
 
     throw new Error(
-      `Failed to load configuration: ${error instanceof Error ? error.message : String(error)}`,
+      `Failed to load configuration: ${
+        error instanceof Error ? error.message : String(error)
+      }`
     );
   }
 }
@@ -78,6 +82,7 @@ function loadConfig(): ConfigFile {
 type ConfigFile = z.infer<typeof configFileSchema>;
 
 export type Config = {
+  mode: "stdio" | "http";
   apiKey: string | undefined;
   port: number;
   planModeEnabled: boolean;
@@ -88,7 +93,10 @@ export type Config = {
 };
 
 const searchModeTools = [KihraToolNames.SearchKirha] as const;
-const planModeTools = [KihraToolNames.CreateKirhaSearchPlan, KihraToolNames.RunKirhaSearchPlan] as const;
+const planModeTools = [
+  KihraToolNames.CreateKirhaSearchPlan,
+  KihraToolNames.RunKirhaSearchPlan,
+] as const;
 
 export const config: Config = (() => {
   const parsedEnv = EnvSchema.safeParse(process.env);
@@ -107,11 +115,13 @@ export const config: Config = (() => {
 
   const configFile = loadConfig();
 
-  const tools = configFile.verticals.find((v) => v.id === parsedEnv.data.VERTICAL_ID)?.tools;
+  const tools = configFile.verticals.find(
+    (v) => v.id === parsedEnv.data.VERTICAL_ID
+  )?.tools;
 
   if (!tools) {
     throw new Error(
-      `invalid configuration: No tools configuration found for vertical ID: ${parsedEnv.data.VERTICAL_ID}`,
+      `invalid configuration: No tools configuration found for vertical ID: ${parsedEnv.data.VERTICAL_ID}`
     );
   }
 
@@ -120,10 +130,11 @@ export const config: Config = (() => {
   const expectedTools = tools.filter((tool) =>
     planModeEnabled
       ? planModeTools.includes(tool.name as (typeof planModeTools)[number])
-      : searchModeTools.includes(tool.name as (typeof searchModeTools)[number]),
+      : searchModeTools.includes(tool.name as (typeof searchModeTools)[number])
   );
 
   return {
+    mode: parsedEnv.data.MODE ?? "stdio",
     port: parsedEnv.data.PORT ?? 3400,
     apiKey: parsedEnv.data.KIRHA_API_KEY,
     planModeEnabled: parsedEnv.data.PLAN_MODE_ENABLED === "true",
