@@ -31,30 +31,25 @@ function createStatelessServer(config: Config) {
         inputSchema: toolDefinition.inputSchema,
       },
       (input, extra) => {
-        const apiKey =
-          (extra.requestInfo?.headers["x-kirha-api-key"] as string) ??
-          config.apiKey;
+        const apiKey = (extra.requestInfo?.headers["x-kirha-api-key"] as string) ?? config.apiKey;
 
         if (!apiKey) {
           throw new Error("KIRHA_API_KEY is required");
         }
 
         return toolDefinition.handler(input, { ...config, apiKey });
-      }
+      },
     );
   });
 
   return server;
 }
 
-function streamableHTTPTransport(
-  c: Context,
-  options?: StreamableHTTPServerTransportOptions
-) {
+function streamableHTTPTransport(c: Context, options?: StreamableHTTPServerTransportOptions) {
   const transport = new StreamableHTTPServerTransport(
     options ?? {
       sessionIdGenerator: undefined,
-    }
+    },
   );
 
   return Object.assign(transport, {
@@ -76,7 +71,7 @@ function startHttpServer(config: Config) {
       allowMethods: ["GET", "POST", "OPTIONS"],
       allowHeaders: ["Accept", "Content-Type", "x-kirha-api-key"],
       exposeHeaders: ["Content-Type"],
-    })
+    }),
   );
 
   app.get("/health", (c) => {
@@ -100,7 +95,7 @@ function startHttpServer(config: Config) {
       const url = `${protocol}://${address}:${info.port}`;
 
       console.log(`MCP server started on ${url}`);
-    }
+    },
   );
 }
 

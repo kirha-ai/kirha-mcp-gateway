@@ -42,7 +42,7 @@ export const configFileSchema = z.object({
     z.object({
       id: z.string(),
       tools: z.array(ToolConfigSchema),
-    })
+    }),
   ),
 });
 
@@ -51,7 +51,7 @@ function getCurrentDirname() {
     if (typeof import.meta !== "undefined" && import.meta.url) {
       return dirname(fileURLToPath(import.meta.url));
     }
-  } catch (e) {}
+  } catch (_e) {}
 
   return process.cwd();
 }
@@ -60,9 +60,7 @@ const __dirname = getCurrentDirname();
 
 function loadConfig(): ConfigFile {
   const path =
-    __dirname === process.cwd()
-      ? join(__dirname, "config.json")
-      : join(dirname(__dirname), "config.json");
+    __dirname === process.cwd() ? join(__dirname, "config.json") : join(dirname(__dirname), "config.json");
 
   try {
     const configData = readFileSync(path, "utf-8");
@@ -72,9 +70,7 @@ function loadConfig(): ConfigFile {
     console.error(`Error loading configuration from ${path}:`, error);
 
     throw new Error(
-      `Failed to load configuration: ${
-        error instanceof Error ? error.message : String(error)
-      }`
+      `Failed to load configuration: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
 }
@@ -93,10 +89,7 @@ export type Config = {
 };
 
 const searchModeTools = [KihraToolNames.SearchKirha] as const;
-const planModeTools = [
-  KihraToolNames.CreateKirhaSearchPlan,
-  KihraToolNames.RunKirhaSearchPlan,
-] as const;
+const planModeTools = [KihraToolNames.CreateKirhaSearchPlan, KihraToolNames.RunKirhaSearchPlan] as const;
 
 export const config: Config = (() => {
   const parsedEnv = EnvSchema.safeParse(process.env);
@@ -115,13 +108,11 @@ export const config: Config = (() => {
 
   const configFile = loadConfig();
 
-  const tools = configFile.verticals.find(
-    (v) => v.id === parsedEnv.data.VERTICAL_ID
-  )?.tools;
+  const tools = configFile.verticals.find((v) => v.id === parsedEnv.data.VERTICAL_ID)?.tools;
 
   if (!tools) {
     throw new Error(
-      `invalid configuration: No tools configuration found for vertical ID: ${parsedEnv.data.VERTICAL_ID}`
+      `invalid configuration: No tools configuration found for vertical ID: ${parsedEnv.data.VERTICAL_ID}`,
     );
   }
 
@@ -130,7 +121,7 @@ export const config: Config = (() => {
   const expectedTools = tools.filter((tool) =>
     planModeEnabled
       ? planModeTools.includes(tool.name as (typeof planModeTools)[number])
-      : searchModeTools.includes(tool.name as (typeof searchModeTools)[number])
+      : searchModeTools.includes(tool.name as (typeof searchModeTools)[number]),
   );
 
   return {
