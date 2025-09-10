@@ -64,3 +64,35 @@ jobs:
             kirha-mcp-gateway.dxt
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+
+  push_docker_hub:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: |
+            kirhaai/kirha-mcp-gateway:latest
+            kirhaai/kirha-mcp-gateway:${{ github.event.release.tag_name }}
